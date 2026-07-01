@@ -54,7 +54,7 @@ The task is modelled as a Markov Decision Process. The agent acts once per tradi
 
 ### State / observation (36-dim, compact)
 
-For each of the $N = 7$ risky assets, four features — 1-, 5-, and 21-day log-returns and 21-day rolling volatility — are standardized with a **causal trailing-window z-score** (so no future information leaks into training):
+For each of the $N = 7$ risky assets, four features 1-, 5-, and 21-day log-returns and 21-day rolling volatility are standardized with a **causal trailing-window z-score** (so no future information leaks into training):
 
 $$
 z(x_t) = \frac{x_t - \mu_{t-W:t}}{\sigma_{t-W:t} + \epsilon}, \qquad W = 252, \;\; \epsilon = 10^{-8}
