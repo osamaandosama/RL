@@ -105,7 +105,7 @@ $$
 Daily adjusted prices downloaded via [yfinance](https://github.com/ranaroussi/yfinance) for **seven assets**: AAPL, MSFT, NVDA, AMZN (tech), GLD (gold), USO (oil), SPY (market), plus a cash sleeve.
 
 - **Period:** 2015–2024 (2,494 trading days after feature computation)
-- **Split:** chronological at `2022-01-01` → 1,742 training days / 752 out-of-sample test days (all test results are strictly out of sample)
+- **Split:** chronological at `2022-01-01` to 1,742 training days / 752 out-of-sample test days (all test results are strictly out of sample)
 
 ## Experimental Setup
 
@@ -121,7 +121,7 @@ Daily adjusted prices downloaded via [yfinance](https://github.com/ranaroussi/yf
 | Transaction cost κ | 0.1% of risky turnover |
 | **Total runs** | **72** |
 
-> **Sanity check.** Before the full grid, a short 20k-step PPO run reached a test Sharpe of **0.86** (vs. 0.98 for 1/N), confirming the data → environment → agent loop works end-to-end.
+> **Sanity check.** Before the full grid, a short 20k-step PPO run reached a test Sharpe of **0.86** (vs. 0.98 for 1/N), confirming the data → environment to agent loop works end-to-end.
 
 ## Results
 
