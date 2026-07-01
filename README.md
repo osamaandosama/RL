@@ -1,6 +1,6 @@
 # Benchmarking Deep Reinforcement Learning Algorithms for Portfolio Optimization
 
-> A controlled benchmark of four deep reinforcement learning algorithms — **PPO, A2C, SAC, and TD3** — against classical baselines (equal-weight 1/N and the Markowitz max-Sharpe portfolio) for long-only daily portfolio allocation over seven assets plus cash.0
+> A controlled benchmark of four deep reinforcement learning algorithms — **PPO, A2C, SAC, and TD3** — against classical baselines (equal-weight 1/N and the Markowitz max-Sharpe portfolio) for long-only daily portfolio allocation over seven assets plus cash.
 
 ![Python](https://img.shields.io/badge/Python-3.9%2B-blue)
 ![Stable--Baselines3](https://img.shields.io/badge/RL-Stable--Baselines3-green)
