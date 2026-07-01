@@ -70,10 +70,6 @@ $$
 
 The policy outputs an unconstrained vector whose last entry is cash. A **softmax** maps it to a long-only, fully-invested portfolio — enforcing the no-short-selling and budget constraints for every algorithm:
 
-$$
-w_t = \operatorname{softmax}(a_t), \qquad w_{t,i} \ge 0, \qquad \sum_{i=1}^{N+1} w_{t,i} = 1
-$$
-
 ### Reward
 
 A risk-adjusted return net of trading cost:
@@ -88,9 +84,6 @@ where $\rho_{t+1}$ are next-day simple returns, $\sigma^{p}_{t}$ is the rolling 
 
 Equal-weight (daily rebalance), buy-and-hold of the S&P 500 (SPY), and the Markowitz max-Sharpe (tangency) portfolio, re-estimated from a trailing 252-day window and rebalanced monthly:
 
-$$
-w^{\star} = \operatorname*{arg\,max}_{w} \; \frac{w^{\top} \mu}{\sqrt{w^{\top} \Sigma\, w}} \qquad \text{s.t.} \;\; \sum_i w_i = 1, \;\; w_i \ge 0
-$$
 
 ### Metrics
 
