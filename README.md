@@ -41,12 +41,12 @@ Rather than proposing a single agent, this project runs a **fair, controlled com
 
 ## Highlights
 
-- 🧪 **Controlled 72-run benchmark**: 4 algorithms × 3 risk-aversion levels × 2 look-back windows × 3 random seeds.
-- 🏗️ **Custom [Gymnasium](https://gymnasium.farama.org/) environment** for long-only daily allocation with a softmax action (including an explicit cash position) and a risk-adjusted, transaction-cost-aware reward.
-- 🤖 **Four DRL agents** from [Stable-Baselines3](https://stable-baselines3.readthedocs.io/): PPO, A2C (on-policy) and SAC, TD3 (off-policy).
-- 📊 **Three classical baselines**: equal-weight (1/N), the Markowitz max-Sharpe (tangency) portfolio, and passive buy-and-hold.
-- 📈 **Seven risk/return metrics** with genuine across-seed error bars, plus a concrete \$10,000 one-year investment simulation.
-- 🔁 **Reproducible**: fixed seeds, cached/resumable runs, TensorBoard logging, and an IEEE-format write-up with derivations.
+-  **Controlled 72-run benchmark**: 4 algorithms × 3 risk-aversion levels × 2 look-back windows × 3 random seeds.
+-  **Custom [Gymnasium](https://gymnasium.farama.org/) environment** for long-only daily allocation with a softmax action (including an explicit cash position) and a risk-adjusted, transaction-cost-aware reward.
+-  **Four DRL agents** from [Stable-Baselines3](https://stable-baselines3.readthedocs.io/): PPO, A2C (on-policy) and SAC, TD3 (off-policy).
+-  **Three classical baselines**: equal-weight (1/N), the Markowitz max-Sharpe (tangency) portfolio, and passive buy-and-hold.
+-  **Seven risk/return metrics** with genuine across-seed error bars, plus a concrete \$10,000 one-year investment simulation.
+-  **Reproducible**: fixed seeds, cached/resumable runs, TensorBoard logging, and an IEEE-format write-up with derivations.
 
 ## Methodology
 
