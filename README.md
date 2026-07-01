@@ -121,7 +121,7 @@ Daily adjusted prices downloaded via [yfinance](https://github.com/ranaroussi/yf
 | Transaction cost κ | 0.1% of risky turnover |
 | **Total runs** | **72** |
 
-> **Sanity check.** Before the full grid, a short 20k-step PPO run reached a test Sharpe of **0.86** (vs. 0.98 for 1/N), confirming the data for the environment-to-agent loop works end-to-end.
+> **Sanity check.** Before the full grid, we trained PPO briefly (20,000 steps) to confirm that the whole pipeline, from data loading to the environment to the agent, is wired correctly; this short run reached a test Sharpe of 0.86 against 0.98 for 1/N, confirming the pipeline functions while not yet being competitive.
 
 ## Results
 
