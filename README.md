@@ -1,6 +1,6 @@
 # Benchmarking Deep Reinforcement Learning Algorithms for Portfolio Optimization
 
-> A controlled benchmark of four deep reinforcement learning algorithms — **PPO, A2C, SAC, and TD3** — against classical baselines (equal-weight 1/N and the Markowitz max-Sharpe portfolio) for long-only daily portfolio allocation over seven assets plus cash.
+> A controlled benchmark of four deep reinforcement learning algorithms **PPO, A2C, SAC, and TD3** against classical baselines (equal-weight 1/N and the Markowitz max-Sharpe portfolio) for long-only daily portfolio allocation over seven assets plus cash.
 
 ![Python](https://img.shields.io/badge/Python-3.9%2B-blue)
 ![Stable--Baselines3](https://img.shields.io/badge/RL-Stable--Baselines3-green)
@@ -9,7 +9,7 @@
 ![Status](https://img.shields.io/badge/status-complete-brightgreen)
 ![License](https://img.shields.io/badge/license-MIT-lightgrey)
 
-Course project for **CISC 856 — Reinforcement Learning** (Group 7), School of Computing, Queen's University.
+Course project for **CISC 856- Reinforcement Learning** (Group 7), School of Computing, Queen's University.
 
 ---
 
@@ -35,7 +35,7 @@ Course project for **CISC 856 — Reinforcement Learning** (Group 7), School of 
 
 ## Overview
 
-Portfolio optimization asks how to split capital across assets to maximize return for an acceptable level of risk. The classical answer, Markowitz mean–variance optimization, assumes stationary and predictable markets — assumptions that real markets violate. Deep Reinforcement Learning (DRL) offers a model-free alternative that learns an allocation policy directly from market experience.
+Portfolio optimization asks how to allocate capital across assets to maximize return while maintaining an acceptable level of risk. The classical answer, Markowitz mean–variance optimization, assumes stationary and predictable markets, assumptions that real markets violate. Deep Reinforcement Learning (DRL) offers a model-free alternative that learns an allocation policy directly from market experience.
 
 Rather than proposing a single agent, this project runs a **fair, controlled comparison**: the trading environment, reward function, feature set, and training budget are held identical across all four algorithms, so any performance difference is attributable to the learning algorithm alone. The agents are also compared against three non-learning baselines to see whether DRL actually adds value.
 
@@ -52,9 +52,9 @@ Rather than proposing a single agent, this project runs a **fair, controlled com
 
 The task is modelled as a Markov Decision Process. The agent acts once per trading day using only information available up to that day (**fully causal**: it acts at day *t*, and the return is realized at *t + 1*).
 
-### State / observation (36-dim, compact)
+### State/observation (36-dim, compact)
 
-For each of the $N = 7$ risky assets, four features 1-, 5-, and 21-day log-returns and 21-day rolling volatility are standardized with a **causal trailing-window z-score** (so no future information leaks into training):
+For each of the $N = 7$ risky assets, four features 1-, 5-, and 21-day log returns and 21-day rolling volatility are standardized with a **causal trailing-window z-score** (so no future information leaks into training):
 
 $$
 z(x_t) = \frac{x_t - \mu_{t-W:t}}{\sigma_{t-W:t} + \epsilon}, \qquad W = 252, \;\; \epsilon = 10^{-8}
@@ -68,14 +68,18 @@ $$
 
 ### Action (8-dim)
 
-The policy outputs an unconstrained vector whose last entry is cash. A **softmax** maps it to a long-only, fully-invested portfolio — enforcing the no-short-selling and budget constraints for every algorithm:
+The policy outputs an unconstrained vector whose last entry is cash. A **softmax** maps it to a long-only, fully-invested portfolio enforcing the no-short-selling and budget constraints for every algorithm:
+
+$$
+w_t = \mathrm{softmax}(a_t), \qquad w_{t,i} \ge 0, \qquad \sum_{i=1}^{N+1} w_{t,i} = 1
+$$
 
 ### Reward
 
-A risk-adjusted return net of trading cost:
+A risk-adjusted return net of trading costs:
 
 $$
-R_t = \underbrace{\sum_{i=1}^{N} w_{t,i}\, \rho_{t+1,i} + w_{t,N+1}\, r_f}_{\text{portfolio return}} \; - \; \lambda\, \sigma^{p}_{t} \; - \; \kappa\, \lVert w^{\text{risky}}_{t} - w^{\text{risky}}_{t-1} \rVert_{1}
+R_t = \underbrace{\sum_{i=1}^{N} w_{t,i}\, \rho_{t+1,i} + w_{t,N+1}\, r_f}_{\text{portfolio return}} \; - \; \lambda\, \sigma^{p}_{t} \; - \; \kappa\, \big\| w^{\text{risky}}_{t} - w^{\text{risky}}_{t-1} \big\|_{1}
 $$
 
 where $\rho_{t+1}$ are next-day simple returns, $\sigma^{p}_{t}$ is the rolling portfolio volatility, $\lambda \in \{0, 0.5, 1\}$ controls risk aversion ($\lambda = 0$ pure profit-seeker, $\lambda = 1$ strongly risk-averse), and $\kappa = 0.1\%$ is a transaction cost on risky-asset turnover.
@@ -84,21 +88,24 @@ where $\rho_{t+1}$ are next-day simple returns, $\sigma^{p}_{t}$ is the rolling 
 
 Equal-weight (daily rebalance), buy-and-hold of the S&P 500 (SPY), and the Markowitz max-Sharpe (tangency) portfolio, re-estimated from a trailing 252-day window and rebalanced monthly:
 
+$$
+w^{\star} = \mathop{\mathrm{arg\,max}}\limits_{w} \; \frac{w^{\top} \mu}{\sqrt{w^{\top} \Sigma\, w}} \qquad \text{s.t.} \;\; \sum_i w_i = 1, \;\; w_i \ge 0
+$$
 
 ### Metrics
 
 Total return, CAGR, annualized volatility, Sortino, maximum drawdown (MDD), plus the Sharpe and Calmar ratios:
 
 $$
-\text{Sharpe} = \frac{\bar{r}}{\sigma_r}\sqrt{252}, \qquad \text{Calmar} = \frac{\text{CAGR}}{\lvert \text{MDD} \rvert}
+\text{Sharpe} = \frac{\bar{r}}{\sigma_r}\sqrt{252}, \qquad \text{Calmar} = \frac{\text{CAGR}}{|\text{MDD}|}
 $$
 
 ## Dataset
 
-Daily adjusted prices downloaded via [yfinance](https://github.com/ranaroussi/yfinance) for **seven assets** — AAPL, MSFT, NVDA, AMZN (tech), GLD (gold), USO (oil), SPY (market) — plus a cash sleeve.
+Daily adjusted prices downloaded via [yfinance](https://github.com/ranaroussi/yfinance) for **seven assets**: AAPL, MSFT, NVDA, AMZN (tech), GLD (gold), USO (oil), SPY (market), plus a cash sleeve.
 
 - **Period:** 2015–2024 (2,494 trading days after feature computation)
-- **Split:** chronological at `2022-01-01` → 1,742 training days / 752 out-of-sample test days (all test results are strictly out of sample)
+- **Split:** chronological at `2022-01-01` to 1,742 training days / 752 out-of-sample test days (all test results are strictly out of sample)
 
 ## Experimental Setup
 
@@ -114,7 +121,7 @@ Daily adjusted prices downloaded via [yfinance](https://github.com/ranaroussi/yf
 | Transaction cost κ | 0.1% of risky turnover |
 | **Total runs** | **72** |
 
-> **Sanity check.** Before the full grid, a short 20k-step PPO run reached a test Sharpe of **0.86** (vs. 0.98 for 1/N), confirming the data → environment → agent loop works end-to-end.
+> **Sanity check.** Before the full grid, a short 20k-step PPO run reached a test Sharpe of **0.86** (vs. 0.98 for 1/N), confirming the data for the environment-to-agent loop works end-to-end.
 
 ## Results
 
@@ -122,7 +129,7 @@ Out-of-sample performance over the full test period (**2022–2024**). Agents sh
 
 | Strategy | Config | Total Ret. | CAGR | Volatility | Sharpe | Max DD | Calmar |
 |:--|:--|--:|--:|--:|:--:|--:|--:|
-| Equal-weight (1/N) | — | 74.8% | 20.6% | 21.4% | **0.98** | −28.2% | 0.73 |
+| Equal-weight (1/N) | - | 74.8% | 20.6% | 21.4% | **0.98** | −28.2% | 0.73 |
 | Markowitz (max-Sharpe) | 252d, monthly | **83.9%** | **22.7%** | 24.8% | 0.95 | −29.4% | **0.77** |
 | **PPO** | λ=0.0, L=60 | 55.7% | 16.0% | **19.1%** | 0.87 ± 0.10 | **−27.2%** | 0.59 |
 | A2C | λ=0.0, L=60 | 47.0% | 13.8% | 19.8% | 0.75 ± 0.06 | −28.7% | 0.49 |
@@ -131,7 +138,7 @@ Out-of-sample performance over the full test period (**2022–2024**). Agents sh
 
 ### \$10,000 invested over one year (2022 bear market)
 
-Ranked by final value. Returns are negative, so a **less-negative** number is a **smaller loss** (better). `Max DD` is the worst **peak-to-trough** dip during the year — a risk measure, not the final loss.
+Ranked by final value. Returns are negative, so a **less-negative** number is a **smaller loss** (better). `Max DD` is the worst **peak-to-trough** dip during the year, a risk measure, not the final loss.
 
 | Strategy | Final \$ | ROI | Max DD | Sharpe |
 |:--|--:|--:|--:|--:|
@@ -140,17 +147,17 @@ Ranked by final value. Returns are negative, so a **less-negative** number is a 
 | RL model (PPO) | 7,825 | −21.8% | −26.7% | −0.86 |
 | Equal-weight (1/N) | 7,638 | −23.6% | −28.2% | −0.80 |
 
-> **Reading this fairly.** 2022 was a broad market downturn in which essentially every asset fell; since all strategies are long-only and fully invested, the loss reflects the market regime, not a model failure. The same PPO agent that finishes third here returns **+55.7%** over the full 2022–2024 window once the recovery is included — so a single down-year snapshot understates the model.
+> **Reading this fairly.** 2022 was a broad market downturn in which essentially every asset fell; since all strategies are long-only and fully invested, the loss reflects the market regime, not a model failure. The same PPO agent that finishes third here returns **+55.7%** over the full 2022–2024 window once the recovery is included, so a single down-year snapshot understates the model.
 
 ### Key findings
 
 - **PPO is the strongest DRL agent** (test Sharpe 0.87), followed by A2C, then SAC and TD3.
-- **On-policy methods (PPO, A2C) clearly beat off-policy methods (SAC, TD3)** within the 50k-step budget — the off-policy critics struggle to bootstrap value from the noisy, non-stationary daily reward signal.
-- **The classical baselines remain hard to beat**: over the full test period no agent surpasses equal-weight (Sharpe 0.98) or Markowitz (0.95) on a risk-adjusted basis. A simple 1/N rule is a remarkably strong baseline.
+- **On-policy methods (PPO, A2C) clearly beat off-policy methods (SAC, TD3)** within the 50k-step budget; the off-policy critics struggle to bootstrap value from the noisy, non-stationary daily reward signal.
+- **The classical baselines remain hard to beat**: over the full test period, no agent surpasses equal-weight (Sharpe 0.98) or Markowitz (0.95) on a risk-adjusted basis. A simple 1/N rule is a remarkably strong baseline.
 - **PPO is also the most robust** to its risk-aversion and look-back settings, while TD3 is the most sensitive (even going negative at λ=1, L=60).
 - A **longer look-back (L=60)** helps the on-policy methods; both PPO and A2C peak there.
 
-> This is framed as a **benchmarking study**: the value is the controlled, honest comparison — including the finding that DRL does not automatically outperform simple classical allocation on this task.
+> This is framed as a **benchmarking study**: the value is the controlled, honest comparison including the finding that DRL does not automatically outperform simple classical allocation on this task.
 
 ## Figures
 
@@ -162,7 +169,7 @@ All plots are generated by the notebook and saved to `figures/`:
 | 2 | Asset characteristics | Risk/return by asset + 63-day rolling annualized volatility |
 | 3 | Sharpe by algorithm | Best config per algorithm (mean ± std) vs. the 1/N and Markowitz baselines |
 | 4 | (λ, L) heat-maps | Mean test Sharpe for every risk-aversion / look-back pair, per algorithm |
-| 5 | Training curves | Smoothed episode reward — on-policy stable, off-policy struggling |
+| 5 | Training curves | Smoothed episode reward on-policy stable, off-policy struggling |
 | 6 | Out-of-sample equity | Growth of \$1 for each best agent vs. baselines, 2022–2024 |
 | 7 | Best-agent behaviour | PPO portfolio weights (with cash sleeve) + drawdown over time |
 | 8 | \$10,000 simulation | Portfolio value and cumulative ROI over the 2022 bear market |
@@ -234,18 +241,18 @@ If you use this work, please cite:
   author = {Ibrahim Kamal Eldin, Abdelrahman and Moursy, Ossama Adel and
             Noah, Aya Said Abdallah and Elsayed, Esraa Mohammed},
   year   = {2026},
-  note   = {CISC 856 — Reinforcement Learning, School of Computing, Queen's University}
+  note   = {CISC 856 - Reinforcement Learning, School of Computing, Queen's University}
 }
 ```
 
 ## Authors
 
-**Group 7 — CISC 856, School of Computing, Queen's University**
+**Group 7 - CISC 856, School of Computing, Queen's University**
 
 | Name | Student ID |
 |:--|:--|
-| Abdelrahman Ibrahim Kamal Eldin | 20596377 |
 | Ossama Adel Moursy | 20595449 |
+| Abdelrahman Ibrahim Kamal Eldin | 20596377 |
 | Aya Said Abdallah Noah | 20596338 |
 | Esraa Mohammed Elsayed | 20596301 |
 
@@ -257,4 +264,4 @@ Built with the open-source [Gymnasium](https://gymnasium.farama.org/) and [Stabl
 
 ## License
 
-Released under the MIT License — see [`LICENSE`](LICENSE) for details. *(Add a `LICENSE` file if you want this to apply.)*
+Released under the MIT License - see [`LICENSE`](LICENSE) for details. *(Add a `LICENSE` file if you want this to apply.)*
