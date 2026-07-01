@@ -36,7 +36,7 @@ The task is modelled as a Markov Decision Process. The agent acts once per tradi
 **Reward.** A risk-adjusted return net of trading cost:
 
 ```
-R_t = portfolio_return_t  −  λ · volatility_t  −  κ · turnover_t
+R_t = portfolio_return_t  -  λ · volatility_t  -  κ · turnover_t
 ```
 
 where `λ ∈ {0, 0.5, 1}` controls risk aversion and `κ = 0.1%` is a transaction cost on risky-asset turnover.
@@ -142,7 +142,7 @@ A full IEEE-format write-up (abstract, methodology with equations, experiments, 
 
 ## Authors
 
-**Group 7 — CISC 856, Queen's University**
+**Group 7 - CISC 856, Queen's University**
 
 - Osama Adel Saad
 - Abdelrahman Ibrahim
