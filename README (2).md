@@ -54,7 +54,7 @@ The task is modelled as a Markov Decision Process. The agent acts once per tradi
 
 ### State/observation (36-dim, compact)
 
-For each of the $N = 7$ risky assets, four features 1-, 5-, and 21-day log-returns and 21-day rolling volatility are standardized with a **causal trailing-window z-score** (so no future information leaks into training):
+For each of the $N = 7$ risky assets, four features 1-, 5-, and 21-day log returns and 21-day rolling volatility are standardized with a **causal trailing-window z-score** (so no future information leaks into training):
 
 $$
 z(x_t) = \frac{x_t - \mu_{t-W:t}}{\sigma_{t-W:t} + \epsilon}, \qquad W = 252, \;\; \epsilon = 10^{-8}
@@ -76,7 +76,7 @@ $$
 
 ### Reward
 
-A risk-adjusted return net of trading cost:
+A risk-adjusted return net of trading costs:
 
 $$
 R_t = \underbrace{\sum_{i=1}^{N} w_{t,i}\, \rho_{t+1,i} + w_{t,N+1}\, r_f}_{\text{portfolio return}} \; - \; \lambda\, \sigma^{p}_{t} \; - \; \kappa\, \big\| w^{\text{risky}}_{t} - w^{\text{risky}}_{t-1} \big\|_{1}
@@ -121,7 +121,7 @@ Daily adjusted prices downloaded via [yfinance](https://github.com/ranaroussi/yf
 | Transaction cost κ | 0.1% of risky turnover |
 | **Total runs** | **72** |
 
-> **Sanity check.** Before the full grid, a short 20k-step PPO run reached a test Sharpe of **0.86** (vs. 0.98 for 1/N), confirming the data → environment to agent loop works end-to-end.
+> **Sanity check.** Before the full grid, a short 20k-step PPO run reached a test Sharpe of **0.86** (vs. 0.98 for 1/N), confirming the data for the environment-to-agent loop works end-to-end.
 
 ## Results
 
