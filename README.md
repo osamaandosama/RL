@@ -32,7 +32,7 @@ Course project for **CISC 856- Reinforcement Learning** (Group 7), School of Com
 - [License](#license)
 
 ---
-
+## Video_Link: https://drive.google.com/file/d/1XltuB9ELgEMCoCQKReOuekZl33dLqvrm/view?usp=sharing
 ## Overview
 
 Portfolio optimization asks how to allocate capital across assets to maximize return while maintaining an acceptable level of risk. The classical answer, Markowitz mean–variance optimization, assumes stationary and predictable markets, assumptions that real markets violate. Deep Reinforcement Learning (DRL) offers a model-free alternative that learns an allocation policy directly from market experience.
